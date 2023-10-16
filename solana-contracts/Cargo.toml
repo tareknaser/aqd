@@ -17,6 +17,9 @@ solana-cli-config = "1.16.14"
 solana-client = "1.16.14"
 solana-transaction-status = "1.16.14"
 solana-sdk = "1.16.14"
+solana-cli = "1.16.13"
+solana-cli-output = "1.16.13"
+solana-rpc-client-api = "1.16.13"
 anchor-syn = { version = "0.28.0", features = ["idl"] }
 
 # Numeric Types and Encoding
