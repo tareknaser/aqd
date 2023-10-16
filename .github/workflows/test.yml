@@ -1,0 +1,26 @@
+name: Sanity Check Codebase
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        components: rustfmt, clippy
+
+    - name: Check formatting
+      run: |
+        cargo fmt -- --check
+
+    - name: Build and test
+      run: |
+        cargo test
