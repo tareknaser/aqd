@@ -1,18 +1,4 @@
 [workspace]
-members = [
-    "aqd-core",
-    "aqd-polkadot",
-    "aqd-solana",
-    "aqd-utils",
-    "solana-contracts",
-]
-
-default-members = [
-    "aqd-core",
-    "aqd-polkadot",
-    "aqd-solana",
-    "aqd-utils",
-    "solana-contracts",
-]
+members = ["crates/*"]
 
 resolver = "2"
