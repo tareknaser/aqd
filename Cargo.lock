@@ -226,6 +226,8 @@ dependencies = [
  "anyhow",
  "aqd-utils",
  "clap 4.4.6",
+ "solana-clap-v3-utils",
+ "solana-cli-config",
  "solana-contracts",
 ]
 

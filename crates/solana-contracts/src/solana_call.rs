@@ -25,7 +25,7 @@ use {
 /// call to a Solana program. It includes information such as the Solana RPC client, the Idl (Interface
 /// Definition Language) for the program, the program's ID, the specific instruction to call, call data,
 /// accounts involved, signers, new accounts to be created, and the payer's keypair.
-pub struct SolanaCall {
+pub struct SolanaTransaction {
     rpc_client: RpcClient,
     idl: Idl,
     program_id: Pubkey,
@@ -81,7 +81,7 @@ struct SolanaCallOpts {
 /// The [`SolanaCallBuilder`] allows you to fluently specify various configuration options for
 /// setting up a Solana program call. These options include the Solana RPC client, Idl (Interface
 /// Definition Language), program ID, instruction, call data, accounts, and payer. Once all
-/// necessary parameters are set, you can use this builder to build a [`SolanaCall`] instance for
+/// necessary parameters are set, you can use this builder to build a [`SolanaTransaction`] instance for
 /// executing the program call.
 #[allow(clippy::type_complexity)]
 pub struct SolanaCallBuilder<RpcClient, Idl, ProgramID, Instruction, CallData, Accounts, Payer> {
@@ -365,9 +365,9 @@ impl
         state::Payer,
     >
 {
-    /// Finalizes the configuration and prepares the [`SolanaCall`] instance for execution.
+    /// Finalizes the configuration and prepares the [`SolanaTransaction`] instance for execution.
     ///
-    /// This method initializes the [`SolanaCall`] instance with the provided configuration,
+    /// This method initializes the [`SolanaTransaction`] instance with the provided configuration,
     /// including the RPC client, Idl, program ID, instruction, call data, accounts, signers,
     /// new accounts, and payer. If any errors occur during the configuration process,
     /// they will be returned as an `Err` variant of the `Result`.
@@ -385,8 +385,8 @@ impl
     ///
     /// # Returns
     ///
-    /// Returns a `Result` containing the configured [`SolanaCall`] instance if the configuration
-    pub fn done(self) -> Result<SolanaCall> {
+    /// Returns a `Result` containing the configured [`SolanaTransaction`] instance if the configuration
+    pub fn done(self) -> Result<SolanaTransaction> {
         // Get the RPC client
         let rpc_client = RpcClient::new_with_commitment(
             self.opts.rpc_url.clone(),
@@ -424,7 +424,7 @@ impl
         let payer = read_keypair_file(&self.opts.payer)
             .map_err(|e| format_err!("Error getting payer: {}", e))?;
 
-        Ok(SolanaCall {
+        Ok(SolanaTransaction {
             rpc_client,
             idl,
             program_id,
@@ -439,8 +439,8 @@ impl
 }
 
 #[allow(clippy::new_ret_no_self)]
-impl SolanaCall {
-    /// Returns a clean builder for [`SolanaCall`]
+impl SolanaTransaction {
+    /// Returns a clean builder for [`SolanaTransaction`]
     #[allow(clippy::type_complexity)]
     pub fn new() -> SolanaCallBuilder<
         Missing<state::RpcClient>,

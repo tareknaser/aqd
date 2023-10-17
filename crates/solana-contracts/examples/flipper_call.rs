@@ -4,7 +4,7 @@ use {
     anyhow::Result,
     solana_clap_v3_utils::input_validators::normalize_to_url_if_moniker,
     solana_cli_config::{Config, CONFIG_FILE},
-    solana_contracts::{print_transaction_information, SolanaCall},
+    solana_contracts::{print_transaction_information, SolanaTransaction},
 };
 
 /// Example of interacting with Solana programs.
@@ -47,8 +47,8 @@ async fn main() -> Result<()> {
     let accounts_args: Vec<String> =
         vec!["new".to_string(), "self".to_string(), "system".to_string()];
 
-    // Create a `SolanaCall` object with the necessary parameters.
-    let flipper_new = SolanaCall::new()
+    // Create a `SolanaTransaction` object with the necessary parameters.
+    let flipper_new = SolanaTransaction::new()
         .rpc_url(rpc_url.clone())
         .idl(idl_json.to_string())
         .program_id(program_id.to_string())
@@ -74,8 +74,8 @@ async fn main() -> Result<()> {
     // `get` method requires only one account, the data account.
     let accounts_args: Vec<String> = vec![data_account_pubkey.clone()];
 
-    // Create a `SolanaCall` object with the necessary parameters.
-    let call_cmd = SolanaCall::new()
+    // Create a `SolanaTransaction` object with the necessary parameters.
+    let call_cmd = SolanaTransaction::new()
         .rpc_url(rpc_url.clone())
         .idl(idl_json.to_string())
         .program_id(program_id.to_string())
@@ -109,8 +109,8 @@ async fn main() -> Result<()> {
     // `flip` method requires only one account, the data account.
     let accounts_args: Vec<String> = vec![data_account_pubkey.clone()];
 
-    // Create a `SolanaCall` object with the necessary parameters.
-    let call_cmd = SolanaCall::new()
+    // Create a `SolanaTransaction` object with the necessary parameters.
+    let call_cmd = SolanaTransaction::new()
         .rpc_url(rpc_url.clone())
         .idl(idl_json.to_string())
         .program_id(program_id.to_string())
@@ -130,8 +130,8 @@ async fn main() -> Result<()> {
     // `get` method requires only one account, the data account.
     let accounts_args: Vec<String> = vec![data_account_pubkey.clone()];
 
-    // Create a `SolanaCall` object with the necessary parameters.
-    let call_cmd = SolanaCall::new()
+    // Create a `SolanaTransaction` object with the necessary parameters.
+    let call_cmd = SolanaTransaction::new()
         .rpc_url(rpc_url.clone())
         .idl(idl_json.to_string())
         .program_id(program_id.to_string())

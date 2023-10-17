@@ -30,11 +30,7 @@ use {
 /// # Returns
 ///
 /// A `Result` containing a string that represents the result of the deployment operation.
-pub fn deploy_program(
-    program_location: String,
-    verbose: bool,
-    output_json: bool,
-) -> Result<String> {
+pub fn deploy_program(program_location: String) -> Result<String> {
     // Get the path to the configuration file (default location)
     let config_file = CONFIG_FILE
         .as_ref()
@@ -77,16 +73,7 @@ pub fn deploy_program(
         })?;
 
     // Determine the output format (JSON or Display)
-    let output_format = match output_json {
-        true => OutputFormat::Json,
-        false => {
-            if verbose {
-                OutputFormat::DisplayVerbose
-            } else {
-                OutputFormat::Display
-            }
-        }
-    };
+    let output_format = OutputFormat::Display;
 
     let rpc_timeout = Duration::from_secs(
         DEFAULT_RPC_TIMEOUT_SECONDS
@@ -108,7 +95,7 @@ pub fn deploy_program(
         keypair_path: config.keypair_path,
         rpc_client: None,
         rpc_timeout,
-        verbose,
+        verbose: false,
         output_format,
         commitment,
         send_transaction_config: RpcSendTransactionConfig {
@@ -121,6 +108,15 @@ pub fn deploy_program(
     };
 
     // Process the deployment command with the updated configuration
-    process_command(&cmd_config)
-        .map_err(|e| anyhow::anyhow!("Failed to process deployment command: {}", e))
+    let result = process_command(&cmd_config)
+        .map_err(|e| anyhow::anyhow!("Failed to process deployment command: {}", e))?;
+
+    // Extract the program ID from the result
+    // Sample result = "Program Id: 71gxeC5D6bGAUznocUWyXdhWQozhDc72qKL7oZ8zn4kR"
+    let program_id = result
+        .split_whitespace()
+        .nth(2)
+        .ok_or_else(|| anyhow::anyhow!("Failed to get program ID from result"))?;
+
+    Ok(program_id.to_string())
 }

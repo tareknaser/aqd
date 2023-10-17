@@ -10,13 +10,6 @@ pub struct SolanaDeploy {
     program_location: String,
     #[clap(long, help = "Specifies whether to export the output in JSON format")]
     output_json: bool,
-    #[clap(
-        short('v'),
-        long,
-        conflicts_with = "output_json",
-        help = "Specifies whether to display verbose program deployment information"
-    )]
-    verbose: bool,
 }
 
 impl SolanaDeploy {
@@ -39,11 +32,18 @@ impl SolanaDeploy {
         // Parse command-line arguments
         let program_location = self.program_location.clone();
         let output_json = self.output_json;
-        let verbose = self.verbose;
 
         // Deploy the program
-        let result = deploy_program(program_location, output_json, verbose)?;
-        println!("{}", result);
+        let program_id = deploy_program(program_location)?;
+
+        // If the output is JSON, print the program ID in JSON format
+        // Else, print the program ID as a string
+        if output_json {
+            // Print the program ID in JSON format (no need to use serde_json)
+            println!("{{\"program_id\": \"{}\"}}", program_id);
+        } else {
+            println!("Program ID: {}", program_id);
+        }
 
         Ok(())
     }

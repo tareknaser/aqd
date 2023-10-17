@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
-use {
-    crate::SolanaAction,
-    clap::{Parser, Subcommand},
-};
+use clap::{Parser, Subcommand};
+
+use aqd_solana::SolanaAction;
 
 #[derive(Parser)]
 #[command(  author = env!("CARGO_PKG_AUTHORS"), 
