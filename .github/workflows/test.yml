@@ -1,4 +1,4 @@
-name: Sanity Check Codebase
+name: Aqd CI
 
 on:
   push:
@@ -11,6 +11,7 @@ on:
 
 jobs:
   build:
+    name: Sanity Check Codebase
     runs-on: ubuntu-latest
 
     steps:
@@ -41,3 +42,58 @@ jobs:
     - name: Build and test
       run: |
         cargo test
+
+  solana:
+    name: Solana Integration Testing
+    runs-on: solang-ubuntu-latest
+    container: ghcr.io/hyperledger/solang-llvm:ci-6
+
+    steps:
+    # Install jq to parse JSON (used in shell scripts)
+    - name: Install jq 
+      run: |
+        apt-get update
+        apt-get install -y jq 
+
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        components: rustfmt, clippy
+    
+    # Compile Aqd and add it to the path
+    - name: Compile Aqd
+      run: |
+        cargo build --release
+        export PATH=$PATH:$(pwd)/target/release
+
+    # Ensure nohup writes output to a file, not the terminal.
+    # If we don't, solana-test-validator might not be able to write its
+    # output and exit
+    - name: Start Solana Test Validator
+      run: nohup solana-test-validator -q > validator.out &
+
+    # Wait for the validator to start
+    - name: Wait for validator to start
+      run: |
+        sleep 10
+
+    # Generate a new keypair for the test
+    # This is needed to be able to send transactions on the local test network
+    - name: Generate keypair
+      run: solana-keygen new --no-bip39-passphrase
+
+    # Set the URL to localhost
+    - name: Set Solana URL to localhost
+      run: solana config set --url localhost
+    
+    - name: Air drop 50 SOL (required to send transactions)
+      run: solana airdrop 50
+
+    - name: Test Solana CLI
+      run: ./solana_cli.sh
+      working-directory: ./integration/solana
