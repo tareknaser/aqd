@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-use {anyhow::Result, std::process::exit};
+use {anyhow::Result, serde_json::json, std::process::exit};
 use {aqd_utils::check_target_match, solana_contracts::deploy_program};
 
 #[derive(Clone, Debug, clap::Args)]
@@ -39,8 +39,8 @@ impl SolanaDeploy {
         // If the output is JSON, print the program ID in JSON format
         // Else, print the program ID as a string
         if output_json {
-            // Print the program ID in JSON format (no need to use serde_json)
-            println!("{{\"program_id\": \"{}\"}}", program_id);
+            let program_id = json!({ "program_id": program_id });
+            println!("{}", program_id);
         } else {
             println!("Program ID: {}", program_id);
         }

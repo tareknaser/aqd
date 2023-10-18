@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use {
-    crate::{SolanaCall, SolanaDeploy},
+    crate::{SolanaCall, SolanaDeploy, SolanaShow},
     clap::Subcommand,
 };
 
@@ -10,4 +10,5 @@ use {
 pub enum SolanaAction {
     Deploy(SolanaDeploy),
     Call(SolanaCall),
+    Show(SolanaShow),
 }

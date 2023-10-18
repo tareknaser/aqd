@@ -24,8 +24,6 @@ use {
 /// # Arguments
 ///
 /// * `program_location`: A string representing the location of the program to be deployed.
-/// * `verbose`: A boolean indicating whether to provide verbose output.
-/// * `output_json`: A boolean indicating whether to format the output as JSON.
 ///
 /// # Returns
 ///

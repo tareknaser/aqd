@@ -45,6 +45,12 @@ pub struct SolanaCall {
 }
 
 impl SolanaCall {
+    /// Handle the Solana transaction command.
+    ///
+    /// This function handles the processing of a Solana transaction command. It checks if the command
+    /// is being run in the correct directory, parses the command-line arguments, retrieves the RPC URL
+    /// and payer keypair from the configuration file, creates a [`SolanaTransaction`] object, submits
+    /// the transaction, and prints transaction information.
     pub fn handle(&self) -> Result<()> {
         // Make sure the command is run in the correct directory
         // Fails if the command is run in a Solang Polkadot project directory

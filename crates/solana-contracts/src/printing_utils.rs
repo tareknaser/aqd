@@ -65,7 +65,7 @@ macro_rules! print_value {
 /// * `idl`: A reference to an [`Idl`] structure that defines the instructions.
 /// * `instruction_name`: An optional reference to a specific instruction name to print details for.
 /// * `output_json`: A boolean flag indicating whether to output the information in JSON format.
-pub fn print_idl_instruction_info(idl: &Idl, instruction_name: Option<&String>, output_json: bool) {
+pub fn print_idl_instruction_info(idl: &Idl, instruction_name: Option<String>, output_json: bool) {
     // If the instruction name is provided, print only that instruction
     if let Some(instruction_name) = instruction_name {
         // Find the instruction with the specified name

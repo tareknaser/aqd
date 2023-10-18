@@ -19,20 +19,24 @@ fn main() {
 
     match cli.command {
         Solana { action } => match action {
-            SolanaAction::Deploy(deploy_args) => match deploy_args.handle() {
-                Ok(_) => {}
-                Err(err) => {
+            SolanaAction::Deploy(deploy_args) => {
+                if let Err(err) = deploy_args.handle() {
                     eprintln!("{}", err);
                     exit(1);
                 }
-            },
-            SolanaAction::Call(call_args) => match call_args.handle() {
-                Ok(_) => {}
-                Err(err) => {
+            }
+            SolanaAction::Call(call_args) => {
+                if let Err(err) = call_args.handle() {
                     eprintln!("{}", err);
                     exit(1);
                 }
-            },
+            }
+            SolanaAction::Show(show_args) => {
+                if let Err(err) = show_args.handle() {
+                    eprintln!("{}", err);
+                    exit(1);
+                }
+            }
         },
     }
 }
