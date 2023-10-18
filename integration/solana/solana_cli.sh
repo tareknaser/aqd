@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# Add Aqd to PATH
+export PATH="$PATH:$(pwd)/target/release"
 
 # Add Solana CLI to PATH
 export PATH="$PATH:$HOME/.local/share/solana/install/active_release/bin"
