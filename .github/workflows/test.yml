@@ -45,15 +45,19 @@ jobs:
 
   solana:
     name: Solana Integration Testing
-    runs-on: solang-ubuntu-latest
-    container: ghcr.io/hyperledger/solang-llvm:ci-6
+    runs-on: ubuntu-latest
 
     steps:
     # Install jq to parse JSON (used in shell scripts)
     - name: Install jq 
       run: |
-        apt-get update
-        apt-get install -y jq 
+        sudo apt-get update
+        sudo apt-get install -y jq 
+
+    # Install Solana
+    - name: Install Solana
+      run: |
+          sh -c "$(curl -sSfL https://release.solana.com/v1.17.1/install)"
 
     - name: Check out code
       uses: actions/checkout@v3
