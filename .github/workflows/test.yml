@@ -52,12 +52,34 @@ jobs:
     - name: Install jq 
       run: |
         sudo apt-get update
-        sudo apt-get install -y jq 
+        sudo apt-get install -y jq libudev-dev
 
-    # Install Solana
+    # Install Solana and restart the shell
     - name: Install Solana
       run: |
           sh -c "$(curl -sSfL https://release.solana.com/v1.17.1/install)"
+          
+    # Restart the shell so that the Solana CLI is in the path
+    - name: Restart shell
+      run: |
+        exec -l $SHELL
+      
+    # Make sure the shell is restarted
+    - name: Restart shell
+      run: |
+        source $HOME/.bashrc
+
+    - name: Check Solana Installation
+      run: |
+        echo "Solana binary path: $(which solana-test-validator)"
+
+    # Ensure nohup writes output to a file, not the terminal.
+    # If we don't, solana-test-validator might not be able to write its
+    # output and exit
+    # We run it early so that it can start up while the rest of the
+    # workflow is running
+    - name: Start Solana Test Validator
+      run: nohup solana-test-validator -q > validator.out
 
     - name: Check out code
       uses: actions/checkout@v3
@@ -70,21 +92,10 @@ jobs:
         components: rustfmt, clippy
     
     # Compile Aqd and add it to the path
-    - name: Compile Aqd
+    - name: Compile Aqd and add it to the path
       run: |
         cargo build --release
         export PATH=$PATH:$(pwd)/target/release
-
-    # Ensure nohup writes output to a file, not the terminal.
-    # If we don't, solana-test-validator might not be able to write its
-    # output and exit
-    - name: Start Solana Test Validator
-      run: nohup solana-test-validator -q > validator.out &
-
-    # Wait for the validator to start
-    - name: Wait for validator to start
-      run: |
-        sleep 10
 
     # Generate a new keypair for the test
     # This is needed to be able to send transactions on the local test network
