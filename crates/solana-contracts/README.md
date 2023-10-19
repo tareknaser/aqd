@@ -1,11 +1,33 @@
 # Solana Contracts
 
 `solana-contracts` is a Rust crate designed to simplify interaction with smart contracts on the Solana blockchain.
-This crate provides a set of utilities and abstractions to make it easier to call specific functions on Solana smart contracts, leveraging the contract's Instruction Description Language (IDL).
+This crate provides a set of utilities and abstractions to make it easier to deploy smart contracts and to call specific functions on Solana smart contracts, leveraging the contract's Instruction Description Language (IDL).
 
 
 ## Example usage
+The following example demonstrates how to use `solana-contracts` to deploy a smart contract to the Solana blockchain. 
+```rust
+use {
+    anyhow::Result,
+    solana_contracts::deploy_program,
+};
 
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    // Define the contract to call
+    let program_path = "flipper.so".to_string();
+
+    // Deploy the contract (This returns the program ID)
+    let program_id = deploy_program(program_path)?;
+
+    Ok(())
+}
+```
+
+
+
+The following example demonstrates how to use `solana-contracts` to call a method of a deployed smart contract on the Solana blockchain.
 ```rust
 use {
     anyhow::Result,
