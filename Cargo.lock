@@ -236,7 +236,16 @@ dependencies = [
 name = "aqd-utils"
 version = "0.1.0"
 dependencies = [
+ "anchor-syn",
  "anyhow",
+ "base58",
+ "byte-slice-cast",
+ "convert_case",
+ "hex",
+ "num-bigint 0.4.4",
+ "num-traits",
+ "serde",
+ "sha2 0.10.8",
  "toml 0.8.2",
 ]
 
@@ -3657,17 +3666,13 @@ version = "0.1.0"
 dependencies = [
  "anchor-syn",
  "anyhow",
+ "aqd-utils",
  "base58",
  "base64 0.21.4",
- "byte-slice-cast",
  "colored",
- "convert_case",
  "hex",
  "num-bigint 0.4.4",
- "num-traits",
- "serde",
  "serde_json",
- "sha2 0.10.8",
  "solana-clap-v3-utils",
  "solana-cli",
  "solana-cli-config",

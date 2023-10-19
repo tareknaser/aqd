@@ -4,5 +4,16 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+serde = "1.0.188"
 anyhow = "1.0.75"
 toml = "0.8.2"
+
+# Numeric Types and Encoding
+anchor-syn = { version = "0.28.0", features = ["idl"] }
+convert_case = "0.6.0"
+byte-slice-cast = "1.2.2"
+sha2 = "0.10.8"
+num-bigint = { version = "0.4", features = ["rand", "serde"]}
+num-traits = "0.2"
+hex = "0.4.3"
+base58 = "0.2.0"

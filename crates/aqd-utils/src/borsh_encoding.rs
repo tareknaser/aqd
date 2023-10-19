@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anchor_syn::idl::{IdlType, IdlTypeDefinition, IdlTypeDefinitionTy};
+use base58::ToBase58;
 use byte_slice_cast::AsByteSlice;
 use convert_case::{Boundary, Case, Casing};
 use num_bigint::{BigInt, Sign};
 use num_traits::ToPrimitive;
 use serde::Deserialize;
 use sha2::{Digest, Sha256};
-use solana_sdk::bs58;
 use std::cmp::Ordering;
 
 /// Generate discriminator based on the name of the function. This is the 8 byte
@@ -44,7 +44,7 @@ impl std::fmt::Display for BorshToken {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             BorshToken::Address(data) => {
-                write!(f, "{}", bs58::encode(data).into_string())
+                write!(f, "{}", data.to_base58())
             }
             BorshToken::Int { width: _, value } => {
                 write!(f, "{}", value)

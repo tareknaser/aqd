@@ -64,17 +64,17 @@ jobs:
         override: true
         components: rustfmt, clippy
     
+    # Set up Solana CLI 
+    - name: Set up Solana CLI
+      working-directory: ./integration/solana
+      run: ./setup_solana.sh
+    
     # Compile Aqd in release mode
     - name: Compile Aqd 
       run: |
         cargo build --release
-
-    # Set up Solana CLI 
-    - name: Set up Solana CLI
-      working-directory: ./integration/solana
-      run: |
-        ./solana_cli.sh setup
-  
+   
+    # Run Solana integration tests
     - name: Test Solana CLI
       run: ./solana_cli.sh
       working-directory: ./integration/solana
