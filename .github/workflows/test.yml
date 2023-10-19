@@ -54,11 +54,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y jq libudev-dev
 
-    # Install Solana
-    - name: Install Solana
-      run: |
-          sh -c "$(curl -sSfL https://release.solana.com/v1.17.1/install)"
-
     - name: Check out code
       uses: actions/checkout@v3
 
@@ -69,12 +64,17 @@ jobs:
         override: true
         components: rustfmt, clippy
     
-    # Compile Aqd and add it to the path
-    - name: Compile Aqd and add it to the path
+    # Compile Aqd in release mode
+    - name: Compile Aqd 
       run: |
         cargo build --release
-        export PATH=$PATH:$(pwd)/target/release
 
+    # Set up Solana CLI 
+    - name: Set up Solana CLI
+      working-directory: ./integration/solana
+      run: |
+        ./solana_cli.sh setup
+  
     - name: Test Solana CLI
       run: ./solana_cli.sh
       working-directory: ./integration/solana
