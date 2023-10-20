@@ -11,18 +11,18 @@ anyhow = "1.0.75"
 colored = "2.0.4"
 
 # Solana and Anchor Dependencies
-solana-clap-v3-utils = "1.16.14"
-solana-cli-config = "1.16.14"
-solana-client = "1.16.14"
-solana-transaction-status = "1.16.14"
-solana-sdk = "1.16.14"
-solana-cli = "1.16.13"
-solana-cli-output = "1.16.13"
-solana-rpc-client-api = "1.16.13"
+solana-clap-v3-utils = "1.17.2"
+solana-cli-config = "1.17.2"
+solana-client = "1.17.2"
+solana-transaction-status = "1.17.2"
+solana-sdk = "1.17.2"
+solana-cli = "1.17.2"
+solana-cli-output = "1.17.2"
+solana-rpc-client-api = "1.17.2"
 anchor-syn = { version = "0.28.0", features = ["idl"] }
 
 # Numeric Types and Encoding
-num-bigint = { version = "0.4", features = ["rand", "serde"]}
+num-bigint = { version = "0.4", features = ["rand", "serde"] }
 base64 = "0.21.4"
 base58 = "0.2.0"
 hex = "0.4.3"
