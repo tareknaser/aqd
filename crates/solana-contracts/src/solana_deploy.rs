@@ -28,7 +28,13 @@ use {
 /// # Returns
 ///
 /// A `Result` containing a string that represents the result of the deployment operation.
-pub fn deploy_program(program_location: String) -> Result<String> {
+pub fn deploy_program<S>(program_location: S) -> Result<String>
+where
+    S: Into<String>,
+{
+    // Convert the program location to a string
+    let program_location: String = program_location.into();
+
     // Get the path to the configuration file (default location)
     let config_file = CONFIG_FILE
         .as_ref()

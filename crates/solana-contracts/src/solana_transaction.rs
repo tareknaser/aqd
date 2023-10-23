@@ -167,13 +167,13 @@ impl<Id, Pi, In, C, A, Py>
     /// # Returns
     ///
     /// Returns a new [`SolanaTransactionBuilder`] instance with the RPC URL option set.
-    pub fn rpc_url<T: ToString>(
+    pub fn rpc_url<T: Into<String>>(
         self,
         rpc_url: T,
     ) -> SolanaTransactionBuilder<state::RpcClient, Id, Pi, In, C, A, Py> {
         SolanaTransactionBuilder {
             opts: SolanaTransactionOpts {
-                rpc_url: rpc_url.to_string(),
+                rpc_url: rpc_url.into(),
                 ..self.opts
             },
             marker: PhantomData,
@@ -196,13 +196,13 @@ impl<Rp, Pi, In, C, A, Py> SolanaTransactionBuilder<Rp, Missing<state::Idl>, Pi,
     /// # Returns
     ///
     /// Returns a new [`SolanaTransactionBuilder`] instance with the Idl option set.
-    pub fn idl<T: ToString>(
+    pub fn idl<T: Into<String>>(
         self,
         idl: T,
     ) -> SolanaTransactionBuilder<Rp, state::Idl, Pi, In, C, A, Py> {
         SolanaTransactionBuilder {
             opts: SolanaTransactionOpts {
-                idl: idl.to_string(),
+                idl: idl.into(),
                 ..self.opts
             },
             marker: PhantomData,
@@ -225,13 +225,13 @@ impl<Rp, Id, In, C, A, Py>
     /// # Returns
     ///
     /// Returns a new [`SolanaTransactionBuilder`] instance with the program ID option set.
-    pub fn program_id<T: ToString>(
+    pub fn program_id<T: Into<String>>(
         self,
         program_id: T,
     ) -> SolanaTransactionBuilder<Rp, Id, state::ProgramID, In, C, A, Py> {
         SolanaTransactionBuilder {
             opts: SolanaTransactionOpts {
-                program_id: program_id.to_string(),
+                program_id: program_id.into(),
                 ..self.opts
             },
             marker: PhantomData,
@@ -253,13 +253,13 @@ impl<Rp, Id, Pi, C, A, Py>
     /// # Returns
     ///
     /// Returns a new [`SolanaTransactionBuilder`] instance with the specified instruction set.
-    pub fn instruction<T: ToString>(
+    pub fn instruction<T: Into<String>>(
         self,
         instruction: T,
     ) -> SolanaTransactionBuilder<Rp, Id, Pi, state::Instruction, C, A, Py> {
         SolanaTransactionBuilder {
             opts: SolanaTransactionOpts {
-                instruction: instruction.to_string(),
+                instruction: instruction.into(),
                 ..self.opts
             },
             marker: PhantomData,
@@ -290,13 +290,13 @@ impl<Rp, Id, Pi, In, A, Py>
     /// # Returns
     ///
     /// Returns a new [`SolanaTransactionBuilder`] instance with the specified call data set.
-    pub fn call_data<S: ToString>(
+    pub fn call_data<S: Into<String>>(
         self,
         call_data: Vec<S>,
     ) -> SolanaTransactionBuilder<Rp, Id, Pi, In, state::CallData, A, Py> {
         SolanaTransactionBuilder {
             opts: SolanaTransactionOpts {
-                call_data: call_data.into_iter().map(|s| s.to_string()).collect(),
+                call_data: call_data.into_iter().map(|s| s.into()).collect(),
                 ..self.opts
             },
             marker: PhantomData,
@@ -334,13 +334,13 @@ impl<Rp, Id, Pi, In, C, Py>
     /// # Returns
     ///
     /// Returns a new [`SolanaTransactionBuilder`] instance with the specified accounts set.
-    pub fn accounts<S: ToString>(
+    pub fn accounts<S: Into<String>>(
         self,
         accounts: Vec<S>,
     ) -> SolanaTransactionBuilder<Rp, Id, Pi, In, C, state::Accounts, Py> {
         SolanaTransactionBuilder {
             opts: SolanaTransactionOpts {
-                accounts: accounts.into_iter().map(|s| s.to_string()).collect(),
+                accounts: accounts.into_iter().map(|s| s.into()).collect(),
                 ..self.opts
             },
             marker: PhantomData,
@@ -361,13 +361,13 @@ impl<Rp, Id, Pi, In, C, A> SolanaTransactionBuilder<Rp, Id, Pi, In, C, A, Missin
     /// # Returns
     ///
     /// Returns a new [`SolanaTransactionBuilder`] instance with the specified payer set.    
-    pub fn payer<T: ToString>(
+    pub fn payer<T: Into<String>>(
         self,
         payer: T,
     ) -> SolanaTransactionBuilder<Rp, Id, Pi, In, C, A, state::Payer> {
         SolanaTransactionBuilder {
             opts: SolanaTransactionOpts {
-                payer: payer.to_string(),
+                payer: payer.into(),
                 ..self.opts
             },
             marker: PhantomData,

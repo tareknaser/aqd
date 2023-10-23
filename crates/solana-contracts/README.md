@@ -12,9 +12,7 @@ use {
     solana_contracts::deploy_program,
 };
 
-
-#[tokio::main]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
     // Define the contract to call
     let program_path = "flipper.so".to_string();
 
@@ -33,11 +31,10 @@ use {
     anyhow::Result,
     solana_clap_v3_utils::input_validators::normalize_to_url_if_moniker,
     solana_cli_config::{Config, CONFIG_FILE},
-    solana_contracts::{print_transaction_information, SolanaCall},
+    solana_contracts::{print_transaction_information, SolanaTransaction},
 };
 
-#[tokio::main]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
     // Parse the config file to get the RPC URL and payer keypair.
     let config_file = CONFIG_FILE
         .as_ref()
@@ -47,7 +44,7 @@ async fn main() -> Result<()> {
     let keypair = cli_config.keypair_path.to_string();
 
     // Define the path to the IDL JSON file, the program ID, and whether to output JSON.
-    let idl_json = "examples/contracts/flipper.json";
+    let idl_json = "crates/solana-contracts/examples/contracts/flipper.json";
     // The program ID is the address of the deployed program on the Solana blockchain.
     // Replace this with the address of the deployed flipper program.
     let program_id = "71gxeC5D6bGAUznocUWyXdhWQozhDc72qKL7oZ8zn4kR";
@@ -61,8 +58,8 @@ async fn main() -> Result<()> {
     let accounts_args: Vec<String> =
         vec!["new".to_string(), "self".to_string(), "system".to_string()];
 
-    // Create a `SolanaCall` object with the necessary parameters.
-    let flipper_new = SolanaCall::new()
+    // Create a `SolanaTransaction` object with the necessary parameters.
+    let flipper_new = SolanaTransaction::new()
         .rpc_url(rpc_url.clone())
         .idl(idl_json.to_string())
         .program_id(program_id.to_string())
@@ -92,3 +89,5 @@ async fn main() -> Result<()> {
 }
 ```
 In this example, `solana-contracts` streamlines the process of interacting with a Solana smart contract. It takes care of data encoding and prepares the necessary accounts, allowing you to focus on defining the specifics of the transaction and easily submit it to the Solana blockchain.
+
+> For more examples, see the [examples](examples) directory.

@@ -4,7 +4,7 @@ use {
     anyhow::Result,
     solana_clap_v3_utils::input_validators::normalize_to_url_if_moniker,
     solana_cli_config::{Config, CONFIG_FILE},
-    solana_contracts::{print_transaction_information, SolanaTransaction},
+    solana_contracts::{deploy_program, print_transaction_information, SolanaTransaction},
 };
 
 /// Example of interacting with Solana programs.
@@ -21,9 +21,8 @@ use {
 /// `examples/contracts/flipper.sol` file. The contract is compiled using the Solang compiler
 /// and deployed using the Solana CLI.
 ///
-/// To run this example, you need to deploy the flipper program and create the data account.
-#[tokio::main]
-async fn main() -> Result<()> {
+/// To run the example, make sure the Solana CLI is installed and the Solana test validator is running.
+fn main() -> Result<()> {
     // Parse the config file to get the RPC URL and payer keypair.
     let config_file = CONFIG_FILE
         .as_ref()
@@ -33,11 +32,14 @@ async fn main() -> Result<()> {
     let keypair = cli_config.keypair_path.to_string();
 
     // Define the path to the IDL JSON file, the program ID, and whether to output JSON.
-    let idl_json = "examples/contracts/flipper.json";
-    // The program ID is the address of the deployed program on the Solana blockchain.
-    // Replace this with the address of the deployed flipper program.
-    let program_id = "71gxeC5D6bGAUznocUWyXdhWQozhDc72qKL7oZ8zn4kR";
+    let idl_json = "crates/solana-contracts/examples/contracts/flipper.json";
     let output_json = false;
+
+    // The compiled program is assumed to be in the same directory as the IDL JSON file.
+    let program_location = "crates/solana-contracts/examples/contracts/flipper.so".to_string();
+
+    // Deploy the flipper program.
+    let program_id = deploy_program(program_location)?;
 
     // Call the `new` method of the flipper program.
 
