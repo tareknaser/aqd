@@ -2,5 +2,4 @@
 
 mod utils;
 
-pub mod borsh_encoding;
 pub use utils::check_target_match;

@@ -6,6 +6,7 @@ edition = "2021"
 
 [dependencies]
 serde_json = "1.0.107"
+serde = "1.0.188"
 tokio = { version = "1", features = ["full"] }
 anyhow = "1.0.75"
 colored = "2.0.4"
@@ -26,5 +27,7 @@ num-bigint = { version = "0.4", features = ["rand", "serde"] }
 base64 = "0.21.4"
 base58 = "0.2.0"
 hex = "0.4.3"
-
-aqd-utils = { path = "../aqd-utils" }
+convert_case = "0.6.0"
+byte-slice-cast = "1.2.2"
+sha2 = "0.10.8"
+num-traits = "0.2"
