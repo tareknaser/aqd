@@ -16,3 +16,4 @@ sp-core = "22.0.0"
 subxt = "0.32.1"
 contract-extrinsics = { git = "https://github.com/paritytech/cargo-contract" }
 contract-build = { git = "https://github.com/paritytech/cargo-contract" }
+aqd-utils = { path = "../aqd-utils" }

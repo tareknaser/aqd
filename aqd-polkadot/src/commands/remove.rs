@@ -1,12 +1,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
-use {anyhow::Result, std::fmt::Debug};
+use {
+    anyhow::{anyhow, Result},
+    colored::Colorize,
+    serde_json::{from_str, json, to_string_pretty, Value},
+    std::fmt::Debug,
+    std::process::exit,
+};
 
 use {
     super::CLIExtrinsicOpts,
-    contract_build::{name_value_println, Verbosity},
+    aqd_utils::{check_target_match, print_key_value},
+    contract_build::Verbosity,
     contract_extrinsics::{
-        parse_code_hash, DefaultConfig, ErrorVariant, ExtrinsicOptsBuilder, RemoveCommandBuilder,
+        parse_code_hash, DefaultConfig, ExtrinsicOptsBuilder, RemoveCommandBuilder,
     },
     subxt::Config,
 };
@@ -26,7 +33,20 @@ impl PolkadotRemoveCommand {
         self.extrinsic_cli_opts.output_json
     }
 
-    pub async fn handle(&self) -> Result<(), ErrorVariant> {
+    /// Handles the removal of a contract from the Polkadot network.
+    ///
+    /// Removes a contract with the specified code hash. If successful, it returns information about the
+    /// removal, including the events generated. The `output_json` flag controls the output format.
+    pub async fn handle(&self) -> Result<()> {
+        // Make sure the command is run in the correct directory
+        // Fails if the command is run in a Solang Solana project directory
+        let target_match = check_target_match("polkadot", None)
+            .map_err(|e| anyhow!("Failed to check current directory: {}", e))?;
+        if !target_match {
+            exit(1);
+        }
+
+        // Initialize the extrinsic options
         let cli_options = ExtrinsicOptsBuilder::default()
             .file(Some(self.extrinsic_cli_opts.file.clone()))
             .url(self.extrinsic_cli_opts.url().clone())
@@ -38,27 +58,35 @@ impl PolkadotRemoveCommand {
             .extrinsic_opts(cli_options)
             .done()
             .await?;
-        let remove_result = exec.remove_code().await?;
+
+        let remove_result = exec
+            .remove_code()
+            .await
+            .map_err(|err| anyhow!("Error removing the code: {}", err.to_string()))?;
         let display_events = remove_result.display_events;
-        let output = if self.output_json() {
+        let events = if self.output_json() {
             display_events.to_json()?
         } else {
-            let token_metadata = exec.token_metadata();
-            display_events.display_events(Verbosity::Default, token_metadata)?
+            display_events.display_events(Verbosity::Default, exec.token_metadata())?
         };
-        println!("{output}");
-        if let Some(code_removed) = remove_result.code_removed {
-            let remove_result = code_removed.code_hash;
-
-            if self.output_json() {
-                println!("{}", &remove_result);
-            } else {
-                name_value_println!("Code hash", format!("{remove_result:?}"));
-            }
-            Ok(())
+        let code_removed = remove_result.code_removed.ok_or_else(|| {
+            anyhow!(
+                "Error removing the code: {}",
+                hex::encode(exec.final_code_hash())
+            )
+        })?;
+        let remove_result = code_removed.code_hash;
+        if self.output_json() {
+            let json_object = json!({
+                "events": from_str::<Value>(&events)?,
+                "removed_code_hash": remove_result,
+            });
+            let json_object = to_string_pretty(&json_object)?;
+            println!("{}", json_object);
         } else {
-            let error_code_hash = hex::encode(exec.final_code_hash());
-            Err(anyhow::anyhow!("Error removing the code: {}", error_code_hash).into())
+            println!("{events}");
+            print_key_value!("Code hash", format!("{remove_result:?}"));
         }
+        Ok(())
     }
 }

@@ -7,5 +7,4 @@ pub use commands::{
     PolkadotCallCommand, PolkadotInstantiateCommand, PolkadotRemoveCommand, PolkadotUploadCommand,
 };
 
-pub use contract_extrinsics::ErrorVariant;
 pub use polkadot_action::PolkadotAction;

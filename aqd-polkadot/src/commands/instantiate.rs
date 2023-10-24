@@ -1,13 +1,20 @@
 // SPDX-License-Identifier: Apache-2.0
 
-use {anyhow::Result, std::fmt::Debug};
+use {
+    anyhow::{anyhow, Result},
+    colored::Colorize,
+    std::fmt::Debug,
+    std::process::exit,
+};
 
 use {
-    super::{prompt_confirm_transaction, CLIExtrinsicOpts},
-    contract_build::{name_value_println, util::decode_hex, Verbosity},
+    super::CLIExtrinsicOpts,
+    aqd_utils::{
+        check_target_match, print_key_value, print_title, print_warning, prompt_confirm_transaction,
+    },
+    contract_build::{util::decode_hex, Verbosity},
     contract_extrinsics::{
-        BalanceVariant, DisplayEvents, ErrorVariant, ExtrinsicOptsBuilder,
-        InstantiateCommandBuilder,
+        BalanceVariant, DisplayEvents, ExtrinsicOptsBuilder, InstantiateCommandBuilder,
     },
     sp_core::Bytes,
 };
@@ -66,7 +73,21 @@ impl PolkadotInstantiateCommand {
         self.extrinsic_cli_opts.output_json
     }
 
-    pub async fn handle(&self) -> Result<(), ErrorVariant> {
+    /// Handles the instantiation of a contract on the Polkadot network.
+    ///
+    /// If the `execute` flag is set to `false`, it performs a dry run of the instantiation and displays
+    /// the results. If the `output_json` flag is set to `true`, the output is in JSON format.
+    /// Otherwise, it prompts for a transaction confirmation and then submits the transaction for execution.
+    pub async fn handle(&self) -> Result<()> {
+        // Make sure the command is run in the correct directory
+        // Fails if the command is run in a Solang Solana project directory
+        let target_match = check_target_match("polkadot", None)
+            .map_err(|e| anyhow!("Failed to check current directory: {}", e))?;
+        if !target_match {
+            exit(1);
+        }
+
+        // Initialize the extrinsic options
         let cli_options = ExtrinsicOptsBuilder::default()
             .file(Some(self.extrinsic_cli_opts.file.clone()))
             .url(self.extrinsic_cli_opts.url().clone())
@@ -86,36 +107,35 @@ impl PolkadotInstantiateCommand {
 
         if !self.extrinsic_cli_opts.execute {
             let result = exec.instantiate_dry_run().await?;
-            match exec.decode_instantiate_dry_run(&result).await {
-                Ok(dry_run_result) => {
-                    if self.output_json() {
-                        println!("{}", dry_run_result.to_json()?);
-                    } else {
-                        name_value_println!("Result", format!("{}", &dry_run_result.result));
-                        name_value_println!("Reverted", format!("{:?}", &dry_run_result.reverted));
-                        name_value_println!("Contract", &dry_run_result.contract);
-                        name_value_println!(
-                            "Gas consumed",
-                            &dry_run_result.gas_consumed.to_string()
-                        );
-                        println!("Execution of your instantiate call has NOT been completed.\n
-                        To submit the transaction and execute the call on chain, please include -x/--execute flag.");
-                    }
-                    Ok(())
-                }
-                Err(object) => Err(object),
+            let dry_run_result = exec
+                .decode_instantiate_dry_run(&result)
+                .await
+                .map_err(|e| anyhow!("Failed to decode instantiate dry run result: {}", e))?;
+            if self.output_json() {
+                println!("{}", dry_run_result.to_json()?);
+            } else {
+                print_title!("Instantiate dry run result");
+                print_key_value!("Status", format!("{}", &dry_run_result.result));
+                print_key_value!("Reverted", format!("{:?}", &dry_run_result.reverted));
+                print_key_value!("Contract", &dry_run_result.contract);
+                print_key_value!("Gas consumed", &dry_run_result.gas_consumed.to_string());
+                print_warning!("Execution of your instantiate call has NOT been completed. To submit the transaction and execute the call on chain, please include -x/--execute flag.");
             }
+            Ok(())
         } else {
             let gas_limit = exec.estimate_gas().await?;
             if !self.skip_confirm {
                 prompt_confirm_transaction(|| {
                     println!("Instantiation Summary:");
-                    name_value_println!("Constructor", exec.args().constructor());
-                    name_value_println!("Args", exec.args().raw_args().join(" "));
-                    name_value_println!("Gas limit", gas_limit.to_string());
+                    print_key_value!("Constructor", exec.args().constructor());
+                    print_key_value!("Args", exec.args().raw_args().join(" "));
+                    print_key_value!("Gas limit", gas_limit.to_string());
                 })?;
             }
-            let instantiate_result = exec.instantiate(Some(gas_limit)).await?;
+            let instantiate_result = exec
+                .instantiate(Some(gas_limit))
+                .await
+                .map_err(|err| anyhow!("Error instantiating the contract: {:?}", err))?;
             let events = DisplayEvents::from_events(
                 &instantiate_result.result,
                 Some(exec.transcoder()),
@@ -136,9 +156,9 @@ impl PolkadotInstantiateCommand {
                         .display_events(Verbosity::Default, &instantiate_result.token_metadata)?
                 );
                 if let Some(code_hash) = instantiate_result.code_hash {
-                    name_value_println!("Code hash", format!("{code_hash:?}"));
+                    print_key_value!("Code hash", format!("{code_hash:?}"));
                 }
-                name_value_println!("Contract", contract_address);
+                print_key_value!("Contract", contract_address);
             };
             Ok(())
         }

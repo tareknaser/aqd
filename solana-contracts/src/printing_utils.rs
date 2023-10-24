@@ -17,38 +17,6 @@ use {
     solana_transaction_status::{option_serializer::OptionSerializer, UiTransactionEncoding},
 };
 
-/// macro to print a title (yellow and bold)
-#[macro_export]
-macro_rules! print_title {
-    ($title:expr) => {
-        println!("{}", format!("\n{}", $title.bold().yellow(),));
-    };
-}
-
-/// macro to print a subtitle (yellow and bold) indented with 2 spaces
-#[macro_export]
-macro_rules! print_subtitle {
-    ($title:expr) => {
-        println!("{}", format!("\n  {}", $title.bold().yellow(),));
-    };
-}
-
-/// macro to print a key and value (green and bold) indented with 4 spaces
-#[macro_export]
-macro_rules! print_key_value {
-    ($key:expr, $value:expr) => {
-        println!("    {}: {}", format!("{:<15}", $key.bold().green()), $value);
-    };
-}
-
-/// macro to print a value (indented with 4 spaces)
-#[macro_export]
-macro_rules! print_value {
-    ($val:expr) => {
-        println!("    {}", $val);
-    };
-}
-
 /// Prints information about instructions in an Instruction Description Language (IDL) definition.
 ///
 /// This function takes an [`Idl`] structure, an optional instruction name, and a flag for output format.

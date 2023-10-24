@@ -10,17 +10,15 @@ pub use self::{
     remove::PolkadotRemoveCommand, upload::PolkadotUploadCommand,
 };
 
-use {
-    anyhow::{anyhow, Result},
-    std::{
-        io::{self, Write},
-        path::PathBuf,
-    },
-};
+use {std::path::PathBuf, url::Url};
 
 pub use {contract_extrinsics::BalanceVariant, subxt::PolkadotConfig as DefaultConfig};
 
-/// Common CLI options for any extrinsic execution.
+/// Common CLI options for executing extrinsics on a Polkadot node.
+///
+/// These options allow you to specify the contract or metadata file, the node's URL,
+/// network, secret key URI, whether to execute the extrinsic, the storage deposit limit,
+/// and whether to export the output in JSON format.
 #[derive(Clone, Debug, clap::Args)]
 pub struct CLIExtrinsicOpts {
     #[clap(
@@ -35,7 +33,7 @@ pub struct CLIExtrinsicOpts {
         default_value = "ws://localhost:9944",
         help = "Specifies the websockets URL for the substrate node directly."
     )]
-    url: url::Url,
+    url: Url,
     #[clap(
         value_enum,
         name = "network",
@@ -83,45 +81,27 @@ enum Network {
 }
 
 impl CLIExtrinsicOpts {
-    /// Returns the URL for the substrate node.
-    /// If the network is specified, it returns the URL for the network.
-    /// Otherwise, it returns the URL specified by the user.
-    pub fn url(&self) -> url::Url {
+    /// Returns the URL for the Polkadot node based on the specified network or user input.
+    ///
+    /// If a specific network is chosen, the function returns the URL associated with that network.
+    /// Otherwise, it returns the URL provided by the user in the CLI options.
+    pub fn url(&self) -> Url {
         if let Some(net) = &self.network {
             match net {
-                Network::Rococo => {
-                    url::Url::parse("wss://rococo-contracts-rpc.polkadot.io").unwrap()
-                }
-                Network::PhalaPoC5 => url::Url::parse("wss://poc5.phala.network/ws").unwrap(),
-                Network::AstarShiden => url::Url::parse("wss://rpc.shiden.astar.network").unwrap(),
-                Network::AstarShibuya => {
-                    url::Url::parse("wss://rpc.shibuya.astar.network").unwrap()
-                }
-                Network::Astar => url::Url::parse("wss://rpc.astar.network").unwrap(),
-                Network::AlephZeroTestnet => url::Url::parse("wss://ws.test.azero.dev").unwrap(),
-                Network::AlephZero => url::Url::parse("wss://ws.azero.dev").unwrap(),
-                Network::T3RNT0RN => url::Url::parse("wss://ws.t0rn.io").unwrap(),
+                Network::Rococo => Url::parse("wss://rococo-contracts-rpc.polkadot.io").unwrap(),
+                Network::PhalaPoC5 => Url::parse("wss://poc5.phala.network/ws").unwrap(),
+                Network::AstarShiden => Url::parse("wss://rpc.shiden.astar.network").unwrap(),
+                Network::AstarShibuya => Url::parse("wss://rpc.shibuya.astar.network").unwrap(),
+                Network::Astar => Url::parse("wss://rpc.astar.network").unwrap(),
+                Network::AlephZeroTestnet => Url::parse("wss://ws.test.azero.dev").unwrap(),
+                Network::AlephZero => Url::parse("wss://ws.azero.dev").unwrap(),
+                Network::T3RNT0RN => Url::parse("wss://ws.t0rn.io").unwrap(),
                 Network::PendulumTestnet => {
-                    url::Url::parse("wss://rpc-foucoco.pendulumchain.tech").unwrap()
+                    Url::parse("wss://rpc-foucoco.pendulumchain.tech").unwrap()
                 }
             }
         } else {
             self.url.clone()
         }
-    }
-}
-
-/// Prompt the user to confirm transaction.
-pub fn prompt_confirm_transaction<F: FnOnce()>(summary: F) -> Result<()> {
-    summary();
-    println!("Are you sure you want to submit this transaction? (Y/n): ");
-
-    let mut choice = String::new();
-    io::stdout().flush()?;
-    io::stdin().read_line(&mut choice)?;
-    match choice.trim().to_lowercase().as_str() {
-        "y" | "" => Ok(()),
-        "n" => Err(anyhow!("Transaction not submitted")),
-        _ => Err(anyhow!("Invalid choice")),
     }
 }

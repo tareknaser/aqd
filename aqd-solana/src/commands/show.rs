@@ -33,7 +33,7 @@ impl SolanaShow {
     pub fn handle(&self) -> Result<()> {
         // Make sure the command is run in the correct directory
         // Fails if the command is run in a Solang Polkadot project directory
-        let target_match = check_target_match("solang", None)
+        let target_match = check_target_match("solana", None)
             .map_err(|e| anyhow::anyhow!("Failed to check current directory: {}", e))?;
         if !target_match {
             exit(1);

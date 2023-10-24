@@ -2,7 +2,9 @@
 
 use clap::{Parser, Subcommand};
 
-use aqd_solana::SolanaAction;
+// use aqd_solana::SolanaAction;
+
+use aqd_polkadot::PolkadotAction;
 
 #[derive(Parser)]
 #[command(  author = env!("CARGO_PKG_AUTHORS"), 
@@ -15,9 +17,14 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    #[command(about = "Interact with Solana contracts on chain")]
-    Solana {
+    // #[command(about = "Interact with Solana contracts on chain")]
+    // Solana {
+    //     #[clap(subcommand)]
+    //     action: SolanaAction,
+    // },
+    #[command(about = "Interact with Polkadot contracts on chain")]
+    Polkadot {
         #[clap(subcommand)]
-        action: SolanaAction,
+        action: PolkadotAction,
     },
 }

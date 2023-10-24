@@ -2,8 +2,28 @@
 
 use {
     anyhow::{anyhow, Result},
-    std::{fs::File, io::Read, path::PathBuf},
+    std::{
+        fs::File,
+        io,
+        io::{Read, Write},
+        path::PathBuf,
+    },
 };
+
+/// Prompt the user to confirm transaction.
+pub fn prompt_confirm_transaction<F: FnOnce()>(summary: F) -> Result<()> {
+    summary();
+    println!("Are you sure you want to submit this transaction? (Y/n): ");
+
+    let mut choice = String::new();
+    io::stdout().flush()?;
+    io::stdin().read_line(&mut choice)?;
+    match choice.trim().to_lowercase().as_str() {
+        "y" | "" => Ok(()),
+        "n" => Err(anyhow!("Transaction not submitted")),
+        _ => Err(anyhow!("Invalid choice")),
+    }
+}
 
 /// A helper function to check if the target name provided by the user matches the target name in solang.toml
 ///
