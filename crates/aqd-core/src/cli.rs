@@ -2,8 +2,10 @@
 
 use clap::{Parser, Subcommand};
 
+#[cfg(feature = "solana")]
 use aqd_solana::SolanaAction;
 
+#[cfg(feature = "polkadot")]
 use aqd_polkadot::PolkadotAction;
 
 #[derive(Parser)]
@@ -18,11 +20,13 @@ pub struct Cli {
 #[allow(clippy::large_enum_variant)]
 #[derive(Subcommand)]
 pub enum Commands {
+    #[cfg(feature = "solana")]
     #[command(about = "Interact with Solana contracts on chain")]
     Solana {
         #[clap(subcommand)]
         action: SolanaAction,
     },
+    #[cfg(feature = "polkadot")]
     #[command(about = "Interact with Polkadot contracts on chain")]
     Polkadot {
         #[clap(subcommand)]

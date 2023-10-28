@@ -7,8 +7,10 @@ use {
     std::process::exit,
 };
 
+#[cfg(feature = "solana")]
 use aqd_solana::SolanaAction;
 
+#[cfg(feature = "polkadot")]
 use {aqd_polkadot::PolkadotAction, tokio::runtime::Runtime};
 
 /// The main entry point for `aqd` command-line application.
@@ -17,9 +19,11 @@ fn main() {
     let matches = Cli::command().get_matches();
     let cli = Cli::from_arg_matches(&matches).unwrap();
 
+    #[cfg(feature = "polkadot")]
     let runtime = Runtime::new().expect("Failed to create Tokio runtime");
 
     match cli.command {
+        #[cfg(feature = "solana")]
         Solana { action } => match action {
             SolanaAction::Deploy(deploy_args) => {
                 if let Err(err) = deploy_args.handle() {
@@ -40,6 +44,7 @@ fn main() {
                 }
             }
         },
+        #[cfg(feature = "polkadot")]
         Polkadot { action } => match action {
             PolkadotAction::Upload(upload_args) => runtime.block_on(async {
                 if let Err(err) = upload_args.handle().await {
