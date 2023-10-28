@@ -41,6 +41,9 @@ fn main() -> Result<()> {
     // Deploy the flipper program.
     let program_id = deploy_program(program_location)?;
 
+    // Wait for 3 seconds for the program to be deployed.
+    std::thread::sleep(std::time::Duration::from_secs(3));
+
     // Call the `new` method of the flipper program.
 
     // Define the instruction name, data arguments, and accounts arguments.
