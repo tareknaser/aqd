@@ -5,9 +5,9 @@ edition = "2021"
 
 
 [dependencies]
-clap = { version = "4.4.6", features = ["derive"] }
+clap = { version = "4.4.7", features = ["derive"] }
 tokio = "1.33.0"
 
 
-aqd-polkadot = { path = "../../aqd-polkadot" }
-# aqd-solana = { path = "../../aqd-solana", optional = true }
+aqd-polkadot = { path = "../aqd-polkadot" }
+aqd-solana = { path = "../aqd-solana" }

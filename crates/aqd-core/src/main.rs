@@ -7,7 +7,7 @@ use {
     std::process::exit,
 };
 
-// use aqd_solana::SolanaAction;
+use aqd_solana::SolanaAction;
 
 use {aqd_polkadot::PolkadotAction, tokio::runtime::Runtime};
 
@@ -20,26 +20,26 @@ fn main() {
     let runtime = Runtime::new().expect("Failed to create Tokio runtime");
 
     match cli.command {
-        // Solana { action } => match action {
-        //     SolanaAction::Deploy(deploy_args) => {
-        //         if let Err(err) = deploy_args.handle() {
-        //             eprintln!("{}", err);
-        //             exit(1);
-        //         }
-        //     }
-        //     SolanaAction::Call(call_args) => {
-        //         if let Err(err) = call_args.handle() {
-        //             eprintln!("{}", err);
-        //             exit(1);
-        //         }
-        //     }
-        //     SolanaAction::Show(show_args) => {
-        //         if let Err(err) = show_args.handle() {
-        //             eprintln!("{}", err);
-        //             exit(1);
-        //         }
-        //     }
-        // },
+        Solana { action } => match action {
+            SolanaAction::Deploy(deploy_args) => {
+                if let Err(err) = deploy_args.handle() {
+                    eprintln!("{}", err);
+                    exit(1);
+                }
+            }
+            SolanaAction::Call(call_args) => {
+                if let Err(err) = call_args.handle() {
+                    eprintln!("{}", err);
+                    exit(1);
+                }
+            }
+            SolanaAction::Show(show_args) => {
+                if let Err(err) = show_args.handle() {
+                    eprintln!("{}", err);
+                    exit(1);
+                }
+            }
+        },
         Polkadot { action } => match action {
             PolkadotAction::Upload(upload_args) => runtime.block_on(async {
                 if let Err(err) = upload_args.handle().await {

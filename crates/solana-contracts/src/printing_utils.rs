@@ -7,6 +7,7 @@ use {
     crate::borsh_encoding::decode_at_offset,
     anchor_syn::idl::{Idl, IdlAccountItem, IdlInstruction, IdlTypeDefinition},
     anyhow::{anyhow, Result},
+    aqd_utils::{print_key_value, print_subtitle, print_title, print_value},
     colored::Colorize,
     serde_json::{json, Map, Value},
     solana_client::{rpc_client::RpcClient, rpc_config::RpcTransactionConfig},

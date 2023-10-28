@@ -2,7 +2,7 @@
 
 use clap::{Parser, Subcommand};
 
-// use aqd_solana::SolanaAction;
+use aqd_solana::SolanaAction;
 
 use aqd_polkadot::PolkadotAction;
 
@@ -15,13 +15,14 @@ pub struct Cli {
     pub command: Commands,
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Subcommand)]
 pub enum Commands {
-    // #[command(about = "Interact with Solana contracts on chain")]
-    // Solana {
-    //     #[clap(subcommand)]
-    //     action: SolanaAction,
-    // },
+    #[command(about = "Interact with Solana contracts on chain")]
+    Solana {
+        #[clap(subcommand)]
+        action: SolanaAction,
+    },
     #[command(about = "Interact with Polkadot contracts on chain")]
     Polkadot {
         #[clap(subcommand)]

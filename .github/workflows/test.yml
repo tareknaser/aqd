@@ -78,3 +78,42 @@ jobs:
     - name: Test Solana CLI
       run: ./solana_cli.sh
       working-directory: ./integration/solana
+
+  polkadot:
+    name: Polkadot Integration Testing
+    runs-on: ubuntu-latest
+
+    steps:
+    # Install jq to parse JSON (used in shell scripts)
+    - name: Install jq 
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq
+
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+    
+    - name: Start substrate-contracts-node
+      run: |
+        # Download and extract the substrate-contracts-node binary
+        wget https://github.com/paritytech/substrate-contracts-node/releases/download/v0.33.0/substrate-contracts-node-linux.tar.gz
+        tar -xzvf substrate-contracts-node-linux.tar.gz
+    
+        # Run substrate-contracts-node
+        nohup ./artifacts/substrate-contracts-node-linux/substrate-contracts-node --dev --rpc-external > substrate.out &
+    
+    # Compile Aqd in release mode
+    - name: Compile Aqd 
+      run: |
+        cargo build --release
+    
+    # Run Polkadot integration tests
+    - name: Test Polkadot CLI
+      run: ./polkadot_cli.sh
+      working-directory: ./integration/polkadot

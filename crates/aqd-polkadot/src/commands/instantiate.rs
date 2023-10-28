@@ -121,7 +121,6 @@ impl PolkadotInstantiateCommand {
                 print_key_value!("Gas consumed", &dry_run_result.gas_consumed.to_string());
                 print_warning!("Execution of your instantiate call has NOT been completed. To submit the transaction and execute the call on chain, please include -x/--execute flag.");
             }
-            Ok(())
         } else {
             let gas_limit = exec.estimate_gas().await?;
             if !self.skip_confirm {
@@ -160,8 +159,8 @@ impl PolkadotInstantiateCommand {
                 }
                 print_key_value!("Contract", contract_address);
             };
-            Ok(())
         }
+        Ok(())
     }
 }
 

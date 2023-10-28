@@ -487,7 +487,14 @@ fn encode_id_defined_type(
     let ty = &defined_type.ty;
     match ty {
         Struct { fields } => {
-            // the user should pass a json object
+            // The user could either pass a JSON object or a path to a JSON file
+            // If the user passes a path to a JSON file, we need to read the file first
+            let arg_value = match std::fs::read_to_string(&arg_value) {
+                Ok(s) => s,
+                Err(_) => arg_value,
+            };
+
+            // The user should pass a json object
             // for example: {"a": 1, "b": 2}
             // we need to parse the json object and then encode it
             let json_object: serde_json::Value = serde_json::from_str(&arg_value).map_err(

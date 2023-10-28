@@ -5,11 +5,12 @@ use {
     colored::Colorize,
     serde_json::{from_str, json, to_string_pretty, Value},
     std::fmt::Debug,
+    std::process::exit,
 };
 
 use {
     super::CLIExtrinsicOpts,
-    aqd_utils::{print_key_value, print_title, print_warning},
+    aqd_utils::{check_target_match, print_key_value, print_title, print_warning},
     contract_build::Verbosity,
     contract_extrinsics::{ExtrinsicOptsBuilder, UploadCommandBuilder},
 };
@@ -39,6 +40,13 @@ impl PolkadotUploadCommand {
     pub async fn handle(&self) -> Result<()> {
         // Make sure the command is run in the correct directory
         // Fails if the command is run in a Solang Solana project directory
+        let target_match = check_target_match("polkadot", None)
+            .map_err(|e| anyhow!("Failed to check current directory: {}", e))?;
+        if !target_match {
+            exit(1);
+        }
+
+        // Initialize the extrinsic options
         let cli_options = ExtrinsicOptsBuilder::default()
             .file(Some(self.extrinsic_cli_opts.file.clone()))
             .url(self.extrinsic_cli_opts.url().clone())
@@ -95,8 +103,7 @@ impl PolkadotUploadCommand {
                     "events": from_str::<Value>(&events)?,
                     "code_hash": code_stored.code_hash,
                 });
-                let json_object = to_string_pretty(&json_object)?;
-                println!("{}", json_object);
+                println!("{}", to_string_pretty(&json_object)?);
             } else {
                 println!("{}", events);
                 print_key_value!("Code hash", format!("{:?}", code_stored.code_hash));
