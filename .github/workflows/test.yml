@@ -2,7 +2,8 @@ name: Aqd CI
 
 on:
   push:
-    branches: [main]
+    # For now, run CI on main and polkadot branches
+    branches: [main, polkadot]
   pull_request:
     branches: [main]
   # Run every Monday at 1:30 AM UTC
@@ -43,8 +44,8 @@ jobs:
       run: |
         cargo test
 
-  solana:
-    name: Solana Integration Testing
+  polkadot:
+    name: Polkadot Integration Testing
     runs-on: ubuntu-latest
 
     steps:
@@ -52,7 +53,7 @@ jobs:
     - name: Install jq 
       run: |
         sudo apt-get update
-        sudo apt-get install -y jq libudev-dev
+        sudo apt-get install -y jq
 
     - name: Check out code
       uses: actions/checkout@v3
@@ -62,19 +63,22 @@ jobs:
       with:
         toolchain: stable
         override: true
-        components: rustfmt, clippy
     
-    # Set up Solana CLI 
-    - name: Set up Solana CLI
-      working-directory: ./integration/solana
-      run: ./setup_solana.sh
+    - name: Start substrate-contracts-node
+      run: |
+        # Download and extract the substrate-contracts-node binary
+        wget https://github.com/paritytech/substrate-contracts-node/releases/download/v0.33.0/substrate-contracts-node-linux.tar.gz
+        tar -xzvf substrate-contracts-node-linux.tar.gz
+    
+        # Run substrate-contracts-node
+        nohup ./artifacts/substrate-contracts-node-linux/substrate-contracts-node --dev --rpc-external > substrate.out &
     
     # Compile Aqd in release mode
     - name: Compile Aqd 
       run: |
         cargo build --release
-   
-    # Run Solana integration tests
-    - name: Test Solana CLI
-      run: ./solana_cli.sh
-      working-directory: ./integration/solana
+    
+    # Run Polkadot integration tests
+    - name: Test Polkadot CLI
+      run: ./polkadot_cli.sh
+      working-directory: ./integration/polkadot
