@@ -22,18 +22,20 @@ pub struct SolanaCall {
     instruction: String,
     #[clap(
         long,
-        help = "Specifies the data arguments to pass to the instruction",
+        help = "Specifies the data arguments to pass to the instruction.
+                For arrays and vectors, pass a comma-separated list of values. (e.g. 1,2,3,4)
+                For structs, pass a JSON string of the struct. (can be a path to a JSON file)",
         // The number of data arguments is variable (Can be 0 or more)
         num_args = 0..,
     )]
     data: Vec<String>,
     #[clap(
         long,
-        help = "Specifies the accounts arguments to pass to the instruction\n 
-        Keywords:\n 
-        - new: create a new account\n
-        - self: reads the default keypair from the local configuration file.\n
-        - system: use the system program ID as the account\n",
+        help = "Specifies the accounts arguments to pass to the instruction\
+        Keywords:
+        - new: create a new account
+        - self: reads the default keypair from the local configuration file.
+        - system: use the system program ID as the account",
         // The number of accounts arguments is variable (Can be 0 or more)
         num_args = 0..,
     )]

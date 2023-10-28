@@ -2,7 +2,8 @@ name: Aqd CI
 
 on:
   push:
-    branches: [main]
+    # Run on main and solana branches
+    branches: [main, solana]
   pull_request:
     branches: [main]
   # Run every Monday at 1:30 AM UTC
