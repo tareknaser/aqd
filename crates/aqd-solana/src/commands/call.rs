@@ -7,8 +7,8 @@ use {
     std::process::exit,
 };
 use {
+    aqd_solana_contracts::{print_transaction_information, SolanaTransaction},
     aqd_utils::check_target_match,
-    solana_contracts::{print_transaction_information, SolanaTransaction},
 };
 
 #[derive(Clone, Debug, clap::Args)]

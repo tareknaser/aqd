@@ -2,20 +2,20 @@
 
 use {
     anyhow::Result,
+    aqd_solana_contracts::{deploy_program, print_transaction_information, SolanaTransaction},
     solana_clap_v3_utils::input_validators::normalize_to_url_if_moniker,
     solana_cli_config::{Config, CONFIG_FILE},
-    solana_contracts::{deploy_program, print_transaction_information, SolanaTransaction},
 };
 
 /// Example of interacting with Solana programs.
 ///
-/// This example demonstrates how to use the `solana_contracts` crate to interact
+/// This example demonstrates how to use the `aqd_solana_contracts` crate to interact
 /// with Solana programs. It sets up the necessary parameters, including the IDL JSON file, program ID,
 /// instruction names, arguments, and submits transactions to the Solana blockchain. The example includes
 /// calls to the "new," "get," and "flip" methods of a deployed Flipper smart contract.
 ///
 /// This example demonstrates a sequence of interactions with a Solana program, making it useful
-/// for understanding how to work with the `solana_contracts` crate.
+/// for understanding how to work with the `aqd_solana_contracts` crate.
 ///
 /// The flipper contract is assumed to be deployed. The contract is defined in the
 /// `examples/contracts/flipper.sol` file. The contract is compiled using the Solang compiler
@@ -32,11 +32,11 @@ fn main() -> Result<()> {
     let keypair = cli_config.keypair_path.to_string();
 
     // Define the path to the IDL JSON file, the program ID, and whether to output JSON.
-    let idl_json = "crates/solana-contracts/examples/contracts/flipper.json";
+    let idl_json = "crates/aqd-solana-contracts/examples/contracts/flipper.json";
     let output_json = false;
 
     // The compiled program is assumed to be in the same directory as the IDL JSON file.
-    let program_location = "crates/solana-contracts/examples/contracts/flipper.so".to_string();
+    let program_location = "crates/aqd-solana-contracts/examples/contracts/flipper.so".to_string();
 
     // Deploy the flipper program.
     let program_id = deploy_program(program_location)?;

@@ -1,15 +1,15 @@
 # Solana Contracts
 
-`solana-contracts` is a Rust crate designed to simplify interaction with smart contracts on the Solana blockchain.
+`aqd-solana-contracts` is a Rust crate designed to simplify interaction with smart contracts on the Solana blockchain.
 This crate provides a set of utilities and abstractions to make it easier to deploy smart contracts and to call specific functions on Solana smart contracts, leveraging the contract's Instruction Description Language (IDL).
 
 
 ## Example usage
-The following example demonstrates how to use `solana-contracts` to deploy a smart contract to the Solana blockchain. 
+The following example demonstrates how to use `aqd-solana-contracts` to deploy a smart contract to the Solana blockchain. 
 ```rust
 use {
     anyhow::Result,
-    solana_contracts::deploy_program,
+    aqd_solana_contracts::deploy_program,
 };
 
 fn main() -> Result<()> {
@@ -25,13 +25,13 @@ fn main() -> Result<()> {
 
 
 
-The following example demonstrates how to use `solana-contracts` to call a method of a deployed smart contract on the Solana blockchain.
+The following example demonstrates how to use `aqd-solana-contracts` to call a method of a deployed smart contract on the Solana blockchain.
 ```rust
 use {
     anyhow::Result,
     solana_clap_v3_utils::input_validators::normalize_to_url_if_moniker,
     solana_cli_config::{Config, CONFIG_FILE},
-    solana_contracts::{print_transaction_information, SolanaTransaction},
+    aqd_solana_contracts::{print_transaction_information, SolanaTransaction},
 };
 
 fn main() -> Result<()> {
@@ -44,7 +44,7 @@ fn main() -> Result<()> {
     let keypair = cli_config.keypair_path.to_string();
 
     // Define the path to the IDL JSON file, the program ID, and whether to output JSON.
-    let idl_json = "crates/solana-contracts/examples/contracts/flipper.json";
+    let idl_json = "crates/aqd-solana-contracts/examples/contracts/flipper.json";
     // The program ID is the address of the deployed program on the Solana blockchain.
     // Replace this with the address of the deployed flipper program.
     let program_id = "71gxeC5D6bGAUznocUWyXdhWQozhDc72qKL7oZ8zn4kR";
@@ -88,6 +88,6 @@ fn main() -> Result<()> {
     Ok(())
 }
 ```
-In this example, `solana-contracts` streamlines the process of interacting with a Solana smart contract. It takes care of data encoding and prepares the necessary accounts, allowing you to focus on defining the specifics of the transaction and easily submit it to the Solana blockchain.
+In this example, `aqd-solana-contracts` streamlines the process of interacting with a Solana smart contract. It takes care of data encoding and prepares the necessary accounts, allowing you to focus on defining the specifics of the transaction and easily submit it to the Solana blockchain.
 
 > For more examples, see the [examples](examples) directory.

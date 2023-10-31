@@ -11,5 +11,5 @@ serde_json = "1.0.107"
 solana-cli-config = "1.17.2"
 solana-clap-v3-utils = "1.17.2"
 
-solana-contracts = { path = "../solana-contracts" }
+aqd-solana-contracts = { path = "../aqd-solana-contracts" }
 aqd-utils = { path = "../aqd-utils" }

@@ -261,12 +261,41 @@ name = "aqd-solana"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "aqd-solana-contracts",
  "aqd-utils",
  "clap 4.4.7",
  "serde_json",
  "solana-clap-v3-utils",
  "solana-cli-config",
- "solana-contracts",
+]
+
+[[package]]
+name = "aqd-solana-contracts"
+version = "0.1.0"
+dependencies = [
+ "anchor-syn",
+ "anyhow",
+ "aqd-utils",
+ "base58",
+ "base64 0.21.4",
+ "byte-slice-cast",
+ "colored",
+ "convert_case 0.6.0",
+ "hex",
+ "num-bigint 0.4.4",
+ "num-traits",
+ "serde",
+ "serde_json",
+ "sha2 0.10.8",
+ "solana-clap-v3-utils",
+ "solana-cli",
+ "solana-cli-config",
+ "solana-cli-output",
+ "solana-client",
+ "solana-rpc-client-api",
+ "solana-sdk",
+ "solana-transaction-status",
+ "tokio",
 ]
 
 [[package]]
@@ -6092,35 +6121,6 @@ dependencies = [
  "solana-metrics",
  "solana-sdk",
  "thiserror",
- "tokio",
-]
-
-[[package]]
-name = "solana-contracts"
-version = "0.1.0"
-dependencies = [
- "anchor-syn",
- "anyhow",
- "aqd-utils",
- "base58",
- "base64 0.21.4",
- "byte-slice-cast",
- "colored",
- "convert_case 0.6.0",
- "hex",
- "num-bigint 0.4.4",
- "num-traits",
- "serde",
- "serde_json",
- "sha2 0.10.8",
- "solana-clap-v3-utils",
- "solana-cli",
- "solana-cli-config",
- "solana-cli-output",
- "solana-client",
- "solana-rpc-client-api",
- "solana-sdk",
- "solana-transaction-status",
  "tokio",
 ]
 

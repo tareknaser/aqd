@@ -12,7 +12,7 @@ pub use self::{
 
 use {std::path::PathBuf, url::Url};
 
-pub use {contract_extrinsics::BalanceVariant, subxt::PolkadotConfig as DefaultConfig};
+pub use contract_extrinsics::BalanceVariant;
 
 /// Common CLI options for executing extrinsics on a Polkadot node.
 ///

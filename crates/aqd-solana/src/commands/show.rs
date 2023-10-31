@@ -2,8 +2,8 @@
 
 use {anyhow::Result, std::ffi::OsStr, std::process::exit};
 use {
+    aqd_solana_contracts::{idl_from_json, print_idl_instruction_info},
     aqd_utils::check_target_match,
-    solana_contracts::{idl_from_json, print_idl_instruction_info},
 };
 
 #[derive(Clone, Debug, clap::Args)]

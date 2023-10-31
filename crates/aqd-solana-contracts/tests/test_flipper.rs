@@ -2,7 +2,9 @@
 
 use {
     anyhow::Result,
-    solana_contracts::{construct_instruction_accounts, construct_instruction_data, idl_from_json},
+    aqd_solana_contracts::{
+        construct_instruction_accounts, construct_instruction_data, idl_from_json,
+    },
     solana_sdk::pubkey::Pubkey,
     std::ffi::OsStr,
 };

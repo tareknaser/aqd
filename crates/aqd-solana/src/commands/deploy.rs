@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use {anyhow::Result, serde_json::json, std::process::exit};
-use {aqd_utils::check_target_match, solana_contracts::deploy_program};
+use {aqd_solana_contracts::deploy_program, aqd_utils::check_target_match};
 
 #[derive(Clone, Debug, clap::Args)]
 #[clap(name = "deploy", about = "Deploy a program to Solana")]
