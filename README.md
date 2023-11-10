@@ -7,12 +7,12 @@ Whether you're developing on Solana or Polkadot, `Aqd` simplifies your smart con
 
 ## Packages
 
-| Package               | Description                                           | Version        |
-| ------------------    | ----------------------------------                    | -------        |
-| `aqd-core`            | The CLI tool core crate                               | pre-release    |
-| `aqd-polkadot`        | Smart contract interactions for Polkadot              | pre-release    |
-| `aqd-solana`          | Smart contract interactions for Solana                | pre-release    |
-| `aqd-utils`           | Utility functions and common code                     | pre-release    |
+| Package                   | Description                                           | Version        |
+| ------------------        | ----------------------------------                    | -------        |
+| `aqd-core`                | The CLI tool core crate                               | pre-release    |
+| `aqd-polkadot`            | Smart contract interactions for Polkadot              | pre-release    |
+| `aqd-solana`              | Smart contract interactions for Solana                | pre-release    |
+| `aqd-utils`               | Utility functions and common code                     | pre-release    |
 | `aqd-solana-contracts`    | Rust crate for Solana smart contract interactions     | pre-release    |
 
 Please see each package's documentation for details on their features and usage.
