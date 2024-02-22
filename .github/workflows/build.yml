@@ -1,0 +1,39 @@
+name: Aqd CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Sanity Check Codebase
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+
+      # Print Cargo version
+      - name: Print Cargo version
+        run: cargo --version
+
+      # Install libudev (required for solana crates)
+      - name: Install libudev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libudev-dev
+
+      - name: Get Aqd
+        run: git clone https://github.com/hyperledger/solang-aqd.git
+
+      - name: Install Aqd
+        run: cd solang-aqd/crates/aqd-core && cargo install --force --locked --path .
+
+      - name: Run Aqd
+        run: aqd --help
